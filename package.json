@@ -9,7 +9,11 @@
     "test": "mocha --exit"
   },
   "dependencies": {
+    "chai-http": "^4.0.0",
     "express": "^4.16.3",
+    "faker": "^4.1.0",
+    "mocha": "^5.2.0",
+    "mongo": "^0.1.0",
     "mongoose": "^5.0.12",
     "morgan": "^1.9.0",
     "uuid": "^3.2.1"
