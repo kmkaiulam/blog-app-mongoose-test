@@ -35,3 +35,35 @@ function generateBlogPost(){
         created: faker.date.recent
     }
 }
+
+//drop Database
+function dropDatabase(){
+    console.warn('Deleting Database');
+    return mongoose.connection.dropDatabase();
+}
+
+describe('Blog API resource', function(){
+    
+    before(function(){
+        return runServer(TEST_DATABASE_URL);
+    });
+
+    beforeEach(function(){
+        return seedBlogData();
+    });
+
+    afterEach(function(){
+        return dropDatabase();
+    });
+
+    after(function(){
+        return closeServer();
+    });
+
+
+    
+
+
+
+
+});
