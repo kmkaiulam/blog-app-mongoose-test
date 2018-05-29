@@ -32,7 +32,7 @@ function generateBlogPost(){
             },
         title: faker.name.title, 
         content: faker.lorem.paragraph,
-        created: faker.date.recent
+        //created: Date.now
     }
 }
 
@@ -62,8 +62,23 @@ describe('Blog API resource', function(){
 
 
     
+describe('GET endpoint', function(){
 
+    it('should return all blogposts', function(){
+        let res;
+        return chai.request(app)
+            .get('/posts')
+            .then(function(_res){
+                res = _res;
+                expect(res).to.have.status(200);
+                expect(res.body.posts).to.have.lengthOf.at.least(1);
+                return BlogPost.count();
+            })
+            .then(function(count){
+                expect(res.body.posts).to.have.length.of(count)
+            });
+        });
 
-
+    });
 
 });
