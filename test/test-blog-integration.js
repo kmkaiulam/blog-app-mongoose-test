@@ -21,6 +21,7 @@ function seedBlogData(){
     for (let i = 1; i<=10; i++){
         seedData.push(generateBlogPost());
     return BlogPost.insertMany(seedData);
+    }
 }
 
 function generateBlogPost(){
@@ -60,34 +61,52 @@ describe('Blog API resource', function(){
 
 
     
-describe('GET endpoint', function(){
+    describe('GET endpoint', function(){
 
-    it('should return all blogposts', function(){
-        let res;
-        return chai.request(app)
-        .get('/posts')
-        .then(_res => {
-          res = _res;
-          expect(res).to.have.status(200);
-          // otherwise our db seeding didn't work
-          expect(res.body).to.have.lengthOf.at.least(1);
-
-          return BlogPost.count();
+        it('should return all blogposts', function(){
+            let res;
+            return chai.request(app)
+                .get('/posts')
+                .then(_res => {
+                res = _res;
+                expect(res).to.have.status(200);
+                // otherwise our db seeding didn't work
+                expect(res.body).to.have.lengthOf.at.least(1);
+                return BlogPost.count();
+                })
+                .then(count => {
+                // the number of returned posts should be same
+                // as number of posts in DB
+                expect(res.body).to.have.lengthOf(count);
+                });
         })
-            .then(count => {
-            // the number of returned posts should be same
-            // as number of posts in DB
-            expect(res.body).to.have.lengthOf(count);
-            });
-        });
+        
+        it('should return all blogposts with correct fields', function(){ 
+            let resPost;
+            return chai.request(app)
+                .get('/posts')
+                .then(res => {
+                expect(res).to.have.status(200);
+                expect(res).to.be.json;
+
+                res.body.forEach(function (post){
+                    expect(post).to.be.a('object');
+                    expect(post).to.include.keys('id', 'title', 'content', 'author', 'created');
+                });
+                resPost = res.body[0];
+                return BlogPost.findById(resPost.id);
+            })
+                .then(post => {
+                    expect(resPost.title).to.equal(post.title);
+                    expect(resPost.content).to.equal(post.content);
+                    expect(resPost.author).to.equal(post.authorName);
+                })
+
+        })
+    
     });
 
-describe('')
+   
 
 
-
-
-})   
-
-
-
+});
