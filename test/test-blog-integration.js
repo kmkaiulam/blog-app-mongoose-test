@@ -20,19 +20,17 @@ function seedBlogData(){
 
     for (let i = 1; i<=10; i++){
         seedData.push(generateBlogPost());
-    }
     return BlogPost.insertMany(seedData);
 }
 
 function generateBlogPost(){
     return {
         author: {
-            firstName: faker.name.firstName ,
-            lastName:  faker.name.lastName
+            firstName: faker.name.firstName() ,
+            lastName:  faker.name.lastName()
             },
-        title: faker.name.title, 
-        content: faker.lorem.paragraph,
-        //created: Date.now
+        title: faker.name.title(), 
+        content: faker.lorem.paragraph(),
     }
 }
 
@@ -52,7 +50,7 @@ describe('Blog API resource', function(){
         return seedBlogData();
     });
 
-    afterEach(function(){
+   afterEach(function(){
         return dropDatabase();
     });
 
@@ -67,18 +65,29 @@ describe('GET endpoint', function(){
     it('should return all blogposts', function(){
         let res;
         return chai.request(app)
-            .get('/posts')
-            .then(function(_res){
-                res = _res;
-                expect(res).to.have.status(200);
-                expect(res.body.posts).to.have.lengthOf.at.least(1);
-                return BlogPost.count();
-            })
-            .then(function(count){
-                expect(res.body.posts).to.have.length.of(count)
+        .get('/posts')
+        .then(_res => {
+          res = _res;
+          expect(res).to.have.status(200);
+          // otherwise our db seeding didn't work
+          expect(res.body).to.have.lengthOf.at.least(1);
+
+          return BlogPost.count();
+        })
+            .then(count => {
+            // the number of returned posts should be same
+            // as number of posts in DB
+            expect(res.body).to.have.lengthOf(count);
             });
         });
-
     });
 
-});
+describe('')
+
+
+
+
+})   
+
+
+
