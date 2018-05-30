@@ -13,7 +13,7 @@ const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
 
-//seed data
+
 function seedBlogData(){
     console.info('seeding blog data');
     const seedData = [];
@@ -35,7 +35,7 @@ function generateBlogPost(){
     }
 }
 
-//drop Database
+
 function dropDatabase(){
     console.warn('Deleting Database');
     return mongoose.connection.dropDatabase();
@@ -70,13 +70,12 @@ describe('Blog API resource', function(){
                 .then(_res => {
                 res = _res;
                 expect(res).to.have.status(200);
-                // otherwise our db seeding didn't work
+        
                 expect(res.body).to.have.lengthOf.at.least(1);
                 return BlogPost.count();
                 })
                 .then(count => {
-                // the number of returned posts should be same
-                // as number of posts in DB
+               
                 expect(res.body).to.have.lengthOf(count);
                 });
         })
@@ -100,12 +99,6 @@ describe('Blog API resource', function(){
                     expect(resPost.title).to.equal(post.title);
                     expect(resPost.content).to.equal(post.content);
                     expect(resPost.author).to.equal(post.authorName);
-                    /*
-                    console.log(resPost.created);
-                    console.log(post.created);
-                    console.log(post);
-                    console.log(resPost); 
-                    */
                     expect(Date(resPost.created)).to.equal(Date(post.created));
                     expect(resPost.id).to.equal(String(post._id));
                 })
@@ -113,9 +106,7 @@ describe('Blog API resource', function(){
         })
 
     });
-// create a test-post with faker 
-// send
-// make sure the fields are the same as you entered
+
 
     describe('POST endpoint', function(){
 
@@ -204,11 +195,11 @@ describe('Blog API resource', function(){
             })
             .then(res => {
                 expect(res).to.be.status(204);
-                return BlogPost.findById(idDelete);
+            return BlogPost.findById(idDelete);
             })
-                .then(response => {
-                    expect(response).to.be.null;
-                });
+            .then(response => {
+                 expect(response).to.be.null;
+            });
         });
     });
 });
