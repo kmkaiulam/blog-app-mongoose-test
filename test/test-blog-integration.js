@@ -153,9 +153,7 @@ describe('Blog API resource', function(){
     });
 
     describe('PUT endpoint', function(){
-        //perform GET request to retrieve some data    
-        //only title, content and author can have changed
-
+       
        it('should update a blogpost, changing only the fields edited by user', function(){
             let postUpdate = {
                 author: {
@@ -168,9 +166,8 @@ describe('Blog API resource', function(){
             return chai.request(app)
             .get('/posts')
             .then(res => {
-                postUpdate.id = res.body[0].id
-                //console.log(postUpdate);
-                //console.log(res.body[0]);
+                postUpdate.id = res.body[0].id;
+                
             return BlogPost.findById(res.body[0].id)
             })
             .then(post => { 
@@ -191,7 +188,30 @@ describe('Blog API resource', function(){
         });
     });
 
-})
+    describe('DELETE endpoint', function (){
+        
+        it('should delete a blogpost', function(){
+            let idDelete;
+            return chai.request(app)
+            .get('/posts')
+            .then(res => {
+            return res.body[0].id;
+            })
+            .then(postId => {
+            return chai.request(app)
+            .delete(`/posts/${postId}`);
+                idDelete = postId;
+            })
+            .then(res => {
+                expect(res).to.be.status(204);
+                return BlogPost.findById(idDelete);
+            })
+                .then(response => {
+                    expect(response).to.be.null;
+                });
+        });
+    });
+});
    
 
 
