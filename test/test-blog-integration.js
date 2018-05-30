@@ -143,9 +143,8 @@ describe('Blog API resource', function(){
                 expect(newPostRes.title).to.equal(fakedPost.title);
                 expect(newPostRes.content).to.equal(fakedPost.content);
                 expect(newPostRes.author).to.equal(`${fakedPost.author.firstName} ${fakedPost.author.lastName}`);
-                expect(newPostRes.content).to.equal(fakedPost.content);
             return BlogPost.findById(newPostRes.id)
-            })
+                })
             .then (post => {
                 expect(newPostRes.id).to.equal(post.id);
                 expect(Date(newPostRes.created)).to.equal(Date(post.created));
@@ -158,30 +157,42 @@ describe('Blog API resource', function(){
         //only title, content and author can have changed
 
        it('should update a blogpost, changing only the fields edited by user', function(){
-        let postUpdate = {
-            author: {
-                firstName: faker.name.firstName(),
-                lastName: faker.name.lastName(),
-                },
-            title: faker.name.title(),
-            content: faker.lorem.paragraph(),
-        }
-        return chai.request(app)
-        .get('/posts')
-        .then(res => {
-            postUpdate.id = res.body[0].id
-            console.log(postUpdate);
-            console.log(res.body[0]);
-        })
-     
-        
-        
-       
-
+            let postUpdate = {
+                author: {
+                    firstName: faker.name.firstName(),
+                    lastName: faker.name.lastName(),
+                    },
+                title: faker.name.title(),
+                content: faker.lorem.paragraph(),
+            }
+            return chai.request(app)
+            .get('/posts')
+            .then(res => {
+                postUpdate.id = res.body[0].id
+                //console.log(postUpdate);
+                //console.log(res.body[0]);
+            return BlogPost.findById(res.body[0].id)
+            })
+            .then(post => { 
+            return chai.request(app)
+            .put(`/posts/${post.id}`)
+            .send(postUpdate)
+            })
+            .then(res => {
+                expect(res).to.be.status(204);
+            return BlogPost.findById(postUpdate.id)
+            })
+            .then(post => {
+                expect(post).to.be.a('object');
+                expect(post.title).to.equal(postUpdate.title);
+                expect(post.author).to.deep.include(postUpdate.author); 
+                expect(post.content).to.equal(postUpdate.content);
+            });    
+        });
     });
 
 })
    
 
 
-});
+
