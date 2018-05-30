@@ -86,8 +86,8 @@ describe('Blog API resource', function(){
             return chai.request(app)
                 .get('/posts')
                 .then(res => {
-                expect(res).to.have.status(200);
-                expect(res).to.be.json;
+                    expect(res).to.have.status(200);
+                    expect(res).to.be.json;
 
                 res.body.forEach(function (post){
                     expect(post).to.be.a('object');
@@ -111,23 +111,76 @@ describe('Blog API resource', function(){
                 })
 
         })
-    
+
     });
-// create a test-post with faker send
-// get to make sure the fields are the same as you entered
+// create a test-post with faker 
+// send
+// make sure the fields are the same as you entered
+
     describe('POST endpoint', function(){
 
         it('should return a blogpost that corresponds with all the user entries', function(){
+            let newPostRes;
             let fakedPost = {
-                title: faker.name.title();
-                content:
+                author: {
+                    firstName: faker.name.firstName(),
+                    lastName: faker.name.lastName(),
+                    },
+                title: faker.name.title(),
+                content: faker.lorem.paragraph(),
             }
-        })
-    
-    
-    
-    })
+            return chai.request(app)
+            .post('/posts')
+            .send(fakedPost)
+            .then(res => {
+                expect(res).to.have.status(201);
+                expect(res).to.be.json
+                
+                newPostRes = res.body;
 
+                expect(newPostRes).to.be.a('object');
+                expect(newPostRes).to.include.keys('id', 'title', 'content', 'author', 'created');
+                expect(newPostRes.title).to.equal(fakedPost.title);
+                expect(newPostRes.content).to.equal(fakedPost.content);
+                expect(newPostRes.author).to.equal(`${fakedPost.author.firstName} ${fakedPost.author.lastName}`);
+                expect(newPostRes.content).to.equal(fakedPost.content);
+            return BlogPost.findById(newPostRes.id)
+            })
+            .then (post => {
+                expect(newPostRes.id).to.equal(post.id);
+                expect(Date(newPostRes.created)).to.equal(Date(post.created));
+            });
+        });
+    });
+
+    describe('PUT endpoint', function(){
+        //perform GET request to retrieve some data    
+        //only title, content and author can have changed
+
+       it('should update a blogpost, changing only the fields edited by user', function(){
+        let postUpdate = {
+            author: {
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
+                },
+            title: faker.name.title(),
+            content: faker.lorem.paragraph(),
+        }
+        return chai.request(app)
+        .get('/posts')
+        .then(res => {
+            postUpdate.id = res.body[0].id
+            console.log(postUpdate);
+            console.log(res.body[0]);
+        })
+     
+        
+        
+       
+
+    });
+
+})
    
 
 
