@@ -81,7 +81,7 @@ describe('Blog API resource', function(){
                 });
         })
         
-        it('should return all blogposts with correct fields', function(){ 
+        it('should return blogposts with correct fields', function(){ 
             let resPost;
             return chai.request(app)
                 .get('/posts')
@@ -100,11 +100,33 @@ describe('Blog API resource', function(){
                     expect(resPost.title).to.equal(post.title);
                     expect(resPost.content).to.equal(post.content);
                     expect(resPost.author).to.equal(post.authorName);
+                    /*
+                    console.log(resPost.created);
+                    console.log(post.created);
+                    console.log(post);
+                    console.log(resPost); 
+                    */
+                    expect(Date(resPost.created)).to.equal(Date(post.created));
+                    expect(resPost.id).to.equal(String(post._id));
                 })
 
         })
     
     });
+// create a test-post with faker send
+// get to make sure the fields are the same as you entered
+    describe('POST endpoint', function(){
+
+        it('should return a blogpost that corresponds with all the user entries', function(){
+            let fakedPost = {
+                title: faker.name.title();
+                content:
+            }
+        })
+    
+    
+    
+    })
 
    
 
