@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: b36xV+JpSKfcHg2mfH4FjmhRoErNQwRBuAjZukAC9hrNJ/i8fXSRKOudq9em4+8M5tf7jCJw2DT7Jt0YrHDCrqz6seWjOCBlbTzPtbB45WoCkLwCPcQyEgFCTTtDOpreXwV0wOYhaVpfauDYoV8qDCt4yrSzoASZNG1xiajpJ22/VosNxwX42p8rj4pkJ2wdjtqYX6UF+a/8NgT8kDhps2iCJHABmUiAeZzuLfWH5hw9FYnFOGEZLQ0b25Lm8XO+zuAyAc+xdjqfbgV+YKQdq98Ydqw6q0vcUrmQ+nGR1r3ecdkclaVPcN+LHdgA01NiBDi6aG6D5V2uB2sLn1mZg+35QQfArDcKcm3dtw8PNRcS2KrhGtMV9pFmf++CZb9hbxOQjiOtVz+LRmX7lVJI0V6v/Zytk2XYa+8Zq2RToCSHOYYPY9klCBHnUoCmjxwzSlH28008bnZeASh10sq1FwGMfFMGlf/moet8vn6G34OAlCLisW6Sv4LADKstKyYri6ShEk2bqs+4RpEIE8glS9O5PogQC3kd/p+cLuPsILfeCSLYDrPYPf7OBAdjzChPNP25Q4lmW4JUlmyGgq/dZ2DIO9gsIJUJK8OA1VlMXOHjbzs6syXAR9Q1NujRTJsYlxLwustjXSzcl3qv5leOK/jjeBLo69IDVdwP0/JonU4=
+  app: glacial-savannah-98648
+  on:
+    repo: kmlamthinkful/blog-app-mongoose-test
